@@ -256,8 +256,11 @@ body::after {
 .works {
     padding: 0; /* 横スクロールのためパディング解除 */
     overflow: hidden;
-    background-color: #111; /* ここだけ黒背景にしてメリハリを */
+    background-color: #111; /* ベースの黒 */
     color: #fff;
+    /* ドットパターンを追加 (モダンで整然とした印象に) */
+    background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1.5px, transparent 1.5px);
+    background-size: 30px 30px; /* ドットの間隔 */
 }
 
 .works__container {
