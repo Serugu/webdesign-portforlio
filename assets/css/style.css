@@ -1,9 +1,11 @@
-/* Variables mapped to CSS Variables for easier handling */
+/* Variables */
 :root {
     --font-main: 'Didot', 'Playfair Display', serif;
     --font-body: 'Helvetica Neue', 'Inter', 'YuMincho', serif;
     --color-bg: #FAFAFA;
     --color-text: #1A1A1A;
+    --color-gray: #888;
+    --easing: cubic-bezier(0.2, 0.0, 0.2, 1);
 }
 
 /* Reset & Base */
@@ -13,16 +15,38 @@
     padding: 0;
 }
 
+html.lenis {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+    overflow: hidden;
+}
+
 body {
     font-family: var(--font-body);
     background-color: var(--color-bg);
     color: var(--color-text);
-    overflow-x: hidden; /* 横スクロール対策 */
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
-    position: relative;
+    line-height: 1.8;
+    letter-spacing: 0.04em;
 }
 
-/* Noise Overlay */
+ul { list-style: none; }
+a { text-decoration: none; color: inherit; transition: opacity 0.3s; }
+a:hover { opacity: 0.6; }
+img { max-width: 100%; display: block; }
+
+/* Noise Overlay (質感) */
 body::after {
     content: "";
     position: fixed;
@@ -48,7 +72,7 @@ body::after {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.5s ease, visibility 0.5s ease;
+    transition: opacity 0.8s var(--easing), visibility 0.8s var(--easing);
 }
 
 .loader.is-hidden {
@@ -59,6 +83,7 @@ body::after {
 .loader__text {
     font-family: var(--font-main);
     font-size: 1.5rem;
+    letter-spacing: 0.1em;
     animation: pulse 1.5s infinite;
 }
 
@@ -68,161 +93,16 @@ body::after {
     100% { opacity: 0.5; }
 }
 
-ul { list-style: none; }
-a { text-decoration: none; color: inherit; }
-
-/* Sections Common */
-.section {
-    padding: 100px 5%;
-    min-height: 100vh;
-}
-
-.section__title {
-    font-family: var(--font-main);
-    font-size: 4rem;
-    margin-bottom: 4rem;
-}
-
-/* Hero (Brief) */
-.hero {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden; /* Canvas がはみ出さないように */
-}
-
-/* WebGL Canvas (背景) */
-.hero__canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1; /* テキストの後ろ */
-    opacity: 0.8; /* グリッドが強すぎないように調整 */
-}
-
-.hero__container {
-    position: relative;
-    z-index: 10; /* Canvasより前面 */
-    width: 100%;
-    max-width: 1200px;
-    padding: 0 5%;
-}
-
-.hero__title {
-    font-family: var(--font-main);
-    font-size: clamp(4rem, 15vw, 12rem); /* 画面サイズに合わせて巨大化 */
-    line-height: 0.9;
-    letter-spacing: -0.03em; /* 文字間を詰めて緊張感を出す */
-    color: var(--color-text);
-    mix-blend-mode: difference; /* 背景が変わっても見えるように */
-}
-
-.hero__title-line {
-    display: block;
-}
-
-/* 2行目を右にずらしてリズムを作る */
-.hero__title-line:nth-child(2) {
-    text-align: right;
-    margin-top: -2vw; /* 少し重ねる */
-}
-
-/* Works (Horizontal Scroll Setup) */
-.works {
-    overflow: hidden; /* GSAPで制御するために必須 */
-}
-
-.works__container {
-    display: flex;
-    width: fit-content; /* 中身に合わせて広がる */
-}
-
-.works__list {
-    display: flex;
-    gap: 50px;
-    padding-left: 100px;
-}
-
-.work-item {
-    width: 60vw; /* 大きく見せる */
-    height: 60vh;
-    background-color: #ddd; /* Placeholder */
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 20px;
-}
-
-.work-item__title {
-    font-size: 1.5rem;
-    font-family: var(--font-main);
-}
-
-/* Contact */
-.contact__form {
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    background-color: transparent;
-    font-family: inherit;
-}
-
-.btn-submit {
-    background-color: var(--color-text);
-    color: var(--color-bg);
-    border: none;
-    padding: 15px 40px;
-    cursor: pointer;
-    font-family: var(--font-main);
-    font-size: 1.2rem;
-    transition: opacity 0.3s;
-}
-
-.btn-submit:hover {
-    opacity: 0.8;
-}
-
-/* Footer */
-.footer {
-    padding: 20px;
-    text-align: center;
-    border-top: 1px solid #eee;
-}
-
 /* Header */
 .header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 20px 5%;
+    padding: 40px 5%;
     z-index: 100;
-    mix-blend-mode: difference; /* 背景色が変わっても見えるように */
+    mix-blend-mode: difference;
     color: #fff;
-}
-
-.header__inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -231,11 +111,295 @@ a { text-decoration: none; color: inherit; }
 .header__logo {
     font-family: var(--font-main);
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
 }
 
 .header__list {
     display: flex;
-    gap: 30px;
+    gap: 4vw;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
 }
 
+/* Common Section Style */
+.section {
+    padding: 15vh 5%;
+    position: relative;
+}
+
+.section__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section__title {
+    font-family: var(--font-main);
+    font-size: clamp(3rem, 8vw, 6rem);
+    margin-bottom: 10vh;
+    line-height: 1;
+    font-weight: normal;
+    position: relative;
+    display: inline-block;
+}
+
+/* Hero (Modified) */
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero__canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0.6; /* グリッドを少し控えめに */
+}
+
+.hero__container {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1400px;
+    padding: 0 5%;
+}
+
+.hero__title {
+    font-family: var(--font-main);
+    font-size: clamp(4rem, 13vw, 11rem);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    color: var(--color-text);
+    mix-blend-mode: difference;
+}
+
+.hero__title-line {
+    display: block;
+    /* opacity: 0; GSAPでアニメーションさせるなら初期値0 */
+}
+
+.hero__title-line:nth-child(2) {
+    text-align: right;
+    margin-top: 0; /* 重なりを解除、あるいは控えめに */
+}
+
+/* About (Broken Grid) */
+.about__content {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+@media (min-width: 768px) {
+    .about__content {
+        flex-direction: row;
+        align-items: center; /* 垂直方向中央揃え */
+        justify-content: space-between;
+        position: relative;
+        padding: 10vh 0;
+    }
+}
+
+.about__image-wrapper {
+    flex: 0 0 45%;
+    position: relative;
+    z-index: 1;
+}
+
+.about__image-placeholder {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-family: var(--font-main);
+    /* ここに実際の画像が入る */
+    object-fit: cover;
+}
+
+.about__text {
+    flex: 0 0 50%;
+    z-index: 2;
+    background: transparent;
+}
+
+@media (min-width: 768px) {
+    .about__text {
+        margin-left: -10%; /* 画像に少し重ねる */
+        margin-top: 20%; /* 縦にもずらす */
+    }
+}
+
+.about__name {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: normal;
+}
+
+.about__desc {
+    font-size: 1rem;
+    color: #555;
+    text-align: justify;
+}
+
+/* Works (Horizontal Scroll) */
+.works {
+    padding: 0; /* 横スクロールのためパディング解除 */
+    overflow: hidden;
+    background-color: #111; /* ここだけ黒背景にしてメリハリを */
+    color: #fff;
+}
+
+.works__container {
+    display: flex;
+    width: fit-content;
+    height: 100vh;
+    align-items: center;
+    padding: 0 10vw; /* 最初と最後の余白 */
+}
+
+.works__title-area {
+    margin-right: 10vw;
+    flex-shrink: 0;
+}
+
+.works__list {
+    display: flex;
+    gap: 15vw;
+}
+
+.work-item {
+    position: relative;
+    width: 60vh; /* 画面高さ基準 */
+    flex-shrink: 0;
+    group: hover;
+}
+
+.work-item__image {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background-color: #333;
+    margin-bottom: 1.5rem;
+    transition: transform 0.5s var(--easing);
+    overflow: hidden;
+}
+
+.work-item:hover .work-item__image {
+    transform: scale(0.98);
+    opacity: 0.8;
+}
+
+.work-item__title {
+    font-family: var(--font-main);
+    font-size: 2rem;
+    font-weight: normal;
+}
+
+.work-item__num {
+    position: absolute;
+    top: -3rem;
+    left: -2rem;
+    font-family: var(--font-main);
+    font-size: 6rem;
+    color: rgba(255,255,255,0.1);
+    line-height: 1;
+}
+
+/* Skills (Typography List) */
+.skills__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.skills__list li {
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    font-family: var(--font-main);
+    color: #ccc;
+    transition: color 0.3s;
+    cursor: default;
+}
+
+.skills__list li:hover {
+    color: var(--color-text);
+}
+
+/* Contact (Minimal Form) */
+.contact__form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-gray);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background-color: transparent;
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    border-radius: 0;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-bottom-color: var(--color-text);
+}
+
+.btn-submit {
+    display: block;
+    width: 100%;
+    background-color: transparent;
+    color: var(--color-text);
+    border: 1px solid var(--color-text);
+    padding: 20px;
+    cursor: pointer;
+    font-family: var(--font-main);
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.3s var(--easing);
+    margin-top: 4rem;
+}
+
+.btn-submit:hover {
+    background-color: var(--color-text);
+    color: #fff;
+}
+
+/* Footer */
+.footer {
+    padding: 40px 5%;
+    text-align: center;
+    border-top: 1px solid #eee;
+    font-size: 0.8rem;
+    color: var(--color-gray);
+}
