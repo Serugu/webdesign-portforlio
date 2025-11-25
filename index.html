@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Web Designer</title>
+    <meta name="description" content="静寂の中の躍動 - Webデザイナー ポートフォリオサイト">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Didot:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&family=Noto+Serif+JP:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+
+    <!-- Loading -->
+    <div class="loader" id="js-loader">
+        <span class="loader__text">Loading...</span>
+    </div>
+
+    <!-- Smooth Scroll Wrapper (Lenis) -->
+    <div class="wrapper" id="js-wrapper">
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="header__inner">
+                <div class="header__logo">My Portfolio</div>
+                <nav class="header__nav">
+                    <ul class="header__list">
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#works">Works</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <main class="main-content">
+            
+            <!-- Hero -->
+            <section class="hero" id="hero">
+                <div class="hero__container">
+                    <h1 class="hero__title">
+                        <span class="hero__title-line">Silence</span>
+                        <span class="hero__title-line">& Motion</span>
+                    </h1>
+                    <div class="hero__visual">
+                        <!-- WebGL / Image -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- About -->
+            <section class="section about" id="about">
+                <div class="section__inner">
+                    <h2 class="section__title">About</h2>
+                    <div class="about__content">
+                        <div class="about__image-wrapper">
+                            <div class="about__image-placeholder">Portrait</div>
+                        </div>
+                        <div class="about__text">
+                            <h3 class="about__name">Name Here</h3>
+                            <p class="about__desc">
+                                静寂の中に、確かな動きを。<br>
+                                ミニマルな美しさと、記憶に残るインタラクションを追求するWebデザイナー。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Works -->
+            <section class="section works" id="works">
+                <div class="section__inner">
+                    <h2 class="section__title">Works</h2>
+                    <!-- 横スクロールエリア -->
+                    <div class="works__container" id="js-works-container">
+                        <div class="works__list">
+                            <!-- Work Item 1 -->
+                            <article class="work-item">
+                                <div class="work-item__image"></div>
+                                <h3 class="work-item__title">Project 01</h3>
+                            </article>
+                            <!-- Work Item 2 -->
+                            <article class="work-item">
+                                <div class="work-item__image"></div>
+                                <h3 class="work-item__title">Project 02</h3>
+                            </article>
+                            <!-- Work Item 3 -->
+                            <article class="work-item">
+                                <div class="work-item__image"></div>
+                                <h3 class="work-item__title">Project 03</h3>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Skills -->
+            <section class="section skills" id="skills">
+                <div class="section__inner">
+                    <h2 class="section__title">Skills</h2>
+                    <ul class="skills__list">
+                        <li>HTML/CSS(Sass)</li>
+                        <li>JavaScript (GSAP, Three.js)</li>
+                        <li>PHP (Basic)</li>
+                        <li>Design (Figma, Photoshop)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section class="section contact" id="contact">
+                <div class="section__inner">
+                    <h2 class="section__title">Contact</h2>
+                    <!-- Formspreeを使用する場合の例: actionに自分のFormspree IDを入れる -->
+                    <form action="https://formspree.io/f/YOUR_FORM_ID" method="post" class="contact__form">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">Send Message</button>
+                    </form>
+                    <p style="margin-top: 1em; font-size: 0.8rem; opacity: 0.6;">※GitHub PagesではPHPが動かないため、Formspreeなどの外部サービスを利用してください。</p>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <small class="copyright">&copy; 2025 Web Designer Portfolio.</small>
+        </footer>
+
+    </div>
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.29/dist/lenis.min.js"></script>
+
+    <!-- Main Script -->
+    <script src="./assets/js/main.js" type="module"></script>
+</body>
+</html>

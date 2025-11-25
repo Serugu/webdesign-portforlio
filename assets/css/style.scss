@@ -1,0 +1,81 @@
+// Variables
+$font-main: 'Didot', 'Playfair Display', serif;
+$font-body: 'Helvetica Neue', 'Inter', 'YuMincho', serif;
+$color-bg: #FAFAFA;
+$color-text: #1A1A1A;
+
+// Reset & Base
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: $font-body;
+    background-color: $color-bg;
+    color: $color-text;
+    overflow-x: hidden; /* 横スクロール対策 */
+    -webkit-font-smoothing: antialiased;
+}
+
+ul { list-style: none; }
+a { text-decoration: none; color: inherit; }
+
+// Sections Common
+.section {
+    padding: 100px 5%;
+    min-height: 100vh;
+    
+    &__title {
+        font-family: $font-main;
+        font-size: 4rem;
+        margin-bottom: 4rem;
+    }
+}
+
+// Hero (Brief)
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    &__title {
+        font-family: $font-main;
+        font-size: clamp(3rem, 10vw, 8rem);
+        line-height: 1;
+        text-align: center;
+    }
+}
+
+// Works (Horizontal Scroll Setup)
+.works {
+    overflow: hidden; // GSAPで制御するために必須
+    
+    &__container {
+        display: flex;
+        width: fit-content; // 中身に合わせて広がる
+    }
+    
+    &__list {
+        display: flex;
+        gap: 50px;
+        padding-left: 100px;
+    }
+}
+
+.work-item {
+    width: 60vw; // 大きく見せる
+    height: 60vh;
+    background-color: #ddd; // Placeholder
+    flex-shrink: 0;
+}
+
+// Contact
+.contact__form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
