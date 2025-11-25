@@ -103,6 +103,14 @@ window.addEventListener('DOMContentLoaded', () => {
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
+    // 【デバッグ用】回転する赤いキューブを追加（WebGL動作確認用）
+    // ※これが表示されたらレンダラーは正常
+    const debugGeo = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+    const debugMat = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+    const debugMesh = new THREE.Mesh(debugGeo, debugMat);
+    // scene.add(debugMesh); // ← 本番ではコメントアウト、今はテストのため有効化
+    scene.add(debugMesh);
+
     // マウス移動イベント
     window.addEventListener('mousemove', (e) => {
         targetMouse.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -127,6 +135,12 @@ window.addEventListener('DOMContentLoaded', () => {
         // Uniformsの更新
         material.uniforms.uTime.value = clock.getElapsedTime();
         material.uniforms.uMouse.value.set(mouse.x, mouse.y);
+
+        // デバッグ用キューブを回転
+        if (debugMesh) {
+            debugMesh.rotation.x += 0.01;
+            debugMesh.rotation.y += 0.01;
+        }
 
         renderer.render(scene, camera);
     }
