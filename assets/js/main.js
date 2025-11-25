@@ -1,3 +1,15 @@
+console.log("Main script loaded. Checking libraries...");
+if (typeof gsap !== 'undefined') {
+    console.log("GSAP: Loaded");
+} else {
+    console.error("GSAP: Not Found!");
+}
+if (typeof Lenis !== 'undefined') {
+    console.log("Lenis: Loaded");
+} else {
+    console.error("Lenis: Not Found!");
+}
+
 // ライブラリの登録 (CDNを使っているのでwindowオブジェクトから取得)
 gsap.registerPlugin(ScrollTrigger);
 
