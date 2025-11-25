@@ -150,17 +150,11 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
     <!-- Lenis (新しいパッケージ名) -->
     <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
-    <!-- Three.js (WebGL) - ES Module形式 -->
-    <script type="importmap">
-    {
-        "imports": {
-            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
-        }
-    }
-    </script>
+    <!-- Three.js (WebGL) - グローバル形式 -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
     <!-- WebGL Script (Hero用) -->
-    <script src="./assets/js/hero-webgl.js" type="module"></script>
+    <script src="./assets/js/hero-webgl.js" defer></script>
     <!-- Main Script -->
     <!-- type="module" を削除し、deferを付与してHTML読み込み後に実行させる -->
     <script src="./assets/js/main.js" defer></script>

@@ -3,13 +3,17 @@
  * マウスの動きに追従して歪むグラデーション背景
  */
 
-import * as THREE from 'three';
-
 // WebGLの初期化処理を window.load 後に実行
 window.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('hero-canvas');
     if (!canvas) {
         console.warn('Hero canvas not found.');
+        return;
+    }
+
+    // Three.jsの確認
+    if (typeof THREE === 'undefined') {
+        console.error('Three.js not loaded. WebGL disabled.');
         return;
     }
 
