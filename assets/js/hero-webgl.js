@@ -50,18 +50,18 @@ window.addEventListener('DOMContentLoaded', () => {
             // 画面の中心からの距離
             vec2 center = vUv - 0.5;
             
-            // マウスの影響を受ける歪み
-            vec2 distortion = center * length(uMouse * 0.3);
-            vec2 uv = vUv + distortion * 0.1;
+            // マウスの影響を受ける歪み（強度を上げた）
+            vec2 distortion = center * length(uMouse * 0.5);
+            vec2 uv = vUv + distortion * 0.3;
 
-            // グラデーション (白からライトグレー)
+            // グラデーション (白からグレー)
             float gradient = length(uv - 0.5);
             
             // わずかな動きを加える (時間経過)
-            float noise = random(uv + uTime * 0.05) * 0.02;
+            float noise = random(uv + uTime * 0.05) * 0.03;
             
             vec3 color1 = vec3(0.98, 0.98, 0.98); // ほぼ白
-            vec3 color2 = vec3(0.94, 0.94, 0.95); // 極薄グレー
+            vec3 color2 = vec3(0.88, 0.88, 0.90); // 薄いグレー（少し濃いめ）
             vec3 finalColor = mix(color1, color2, gradient + noise);
 
             gl_FragColor = vec4(finalColor, 1.0);
