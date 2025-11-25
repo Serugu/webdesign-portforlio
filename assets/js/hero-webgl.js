@@ -64,8 +64,9 @@ window.addEventListener('DOMContentLoaded', () => {
             // わずかな動きを加える (時間経過)
             float noise = random(uv + uTime * 0.05) * 0.03;
             
-            vec3 color1 = vec3(0.98, 0.98, 0.98); // ほぼ白
-            vec3 color2 = vec3(0.88, 0.88, 0.90); // 薄いグレー（少し濃いめ）
+            // デバッグ用：派手な色に変更
+            vec3 color1 = vec3(1.0, 0.3, 0.3); // 赤
+            vec3 color2 = vec3(0.3, 0.3, 1.0); // 青
             vec3 finalColor = mix(color1, color2, gradient + noise);
 
             gl_FragColor = vec4(finalColor, 1.0);
@@ -88,9 +89,15 @@ window.addEventListener('DOMContentLoaded', () => {
     scene.add(mesh);
 
     // マウス移動イベント
+    let logCount = 0;
     window.addEventListener('mousemove', (e) => {
         targetMouse.x = (e.clientX / window.innerWidth) * 2 - 1;
         targetMouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        
+        // デバッグ用：10回に1回だけログ出力（連続で出すとうるさいから）
+        if (logCount++ % 10 === 0) {
+            console.log('Mouse:', targetMouse.x.toFixed(2), targetMouse.y.toFixed(2));
+        }
     });
 
     // リサイズ対応
