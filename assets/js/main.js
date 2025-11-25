@@ -1,77 +1,77 @@
 console.log("Main script loaded. Checking libraries...");
-if (typeof gsap !== 'undefined') {
-    console.log("GSAP: Loaded");
-} else {
-    console.error("GSAP: Not Found!");
-}
-if (typeof Lenis !== 'undefined') {
-    console.log("Lenis: Loaded");
-} else {
-    console.error("Lenis: Not Found!");
-}
 
-// ライブラリの登録 (CDNを使っているのでwindowオブジェクトから取得)
-gsap.registerPlugin(ScrollTrigger);
+// 初期化関数
+const initApp = () => {
+    // GSAPの確認と登録
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+        console.log("GSAP & ScrollTrigger: Registered");
+    } else {
+        console.warn("GSAP or ScrollTrigger not found. Animations disabled.");
+    }
+
+    // Lenisの初期化
+    let lenis;
+    if (typeof Lenis !== 'undefined') {
+        try {
+            lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                direction: 'vertical',
+                gestureDirection: 'vertical',
+                smooth: true,
+                mouseMultiplier: 1,
+                smoothTouch: false,
+                touchMultiplier: 2,
+            });
+
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+            console.log("Lenis: Initialized");
+        } catch (e) {
+            console.error("Lenis init failed:", e);
+        }
+    } else {
+        console.error("Lenis library not found. Smooth scroll disabled.");
+    }
+
+    // --- アニメーションの実装エリア ---
+    
+    // Worksセクションの横スクロール
+    const worksContainer = document.querySelector("#js-works-container");
+    const worksSection = document.querySelector("#works");
+
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && worksContainer && worksSection) {
+        // 横幅の計算：コンテナの全幅 - 画面幅 = 移動すべき距離
+        const calculateScroll = () => worksContainer.scrollWidth - window.innerWidth;
+        
+        gsap.to(worksContainer, {
+            x: () => -calculateScroll(), // 関数にすることでリサイズ対応
+            ease: "none",
+            scrollTrigger: {
+                trigger: worksSection,
+                start: "top top",
+                end: () => `+=${calculateScroll()}`,
+                pin: true,
+                scrub: 1,
+                invalidateOnRefresh: true,
+            }
+        });
+    }
+};
 
 // Loading処理
 window.addEventListener("load", () => {
     const loader = document.getElementById("js-loader");
     if (loader) {
-        // 少し待ってから消す（演出用）
         setTimeout(() => {
             loader.classList.add("is-hidden");
-            // ローディング完了後にアニメーションを開始するならここに記述
         }, 800);
     }
+    
+    // ページ読み込み完了後にアプリを初期化
+    initApp();
 });
-
-// Lenis (慣性スクロール) の初期化
-const lenis = new Lenis({
-    duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    direction: 'vertical',
-    gestureDirection: 'vertical',
-    smooth: true,
-    mouseMultiplier: 1,
-    smoothTouch: false,
-    touchMultiplier: 2,
-});
-
-function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-}
-
-requestAnimationFrame(raf);
-
-// GSAPとLenisの連携 (スクロール位置の同期)
-// ※GSAPのScrollTriggerがLenisのスクロールイベントをリッスンするように設定する処理が必要な場合があるが、
-// 最近のバージョンでは自動で動くことが多い。動きが怪しい場合は設定を追加する。
-
-console.log("System Initialized: Lenis & GSAP active.");
-
-// --- アニメーションの実装エリア ---
-
-// Worksセクションの横スクロール
-const worksContainer = document.querySelector("#js-works-container");
-const worksSection = document.querySelector("#works");
-
-if (worksContainer && worksSection) {
-    // 横幅の計算：コンテナの全幅 - 画面幅 = 移動すべき距離
-    const scrollWidth = worksContainer.scrollWidth - window.innerWidth;
-
-    gsap.to(worksContainer, {
-        x: -scrollWidth, // 左へ移動
-        ease: "none",
-        scrollTrigger: {
-            trigger: worksSection,
-            start: "top top", // セクションの上部が画面上部に着いた時
-            end: () => `+=${scrollWidth}`, // スクロール量 = 移動距離
-            pin: true, // 画面を固定
-            scrub: 1, // スクロールに合わせて動かす（数値は慣性）
-            invalidateOnRefresh: true, // リサイズ時に再計算
-            // markers: true // デバッグ用マーカー (本番では消す)
-        }
-    });
-}
-
