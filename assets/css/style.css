@@ -101,22 +101,34 @@ a { text-decoration: none; color: inherit; }
     width: 100%;
     height: 100%;
     z-index: 1; /* テキストの後ろ */
+    opacity: 0.8; /* グリッドが強すぎないように調整 */
 }
 
 .hero__container {
     position: relative;
     z-index: 10; /* Canvasより前面 */
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 5%;
 }
 
 .hero__title {
     font-family: var(--font-main);
-    font-size: clamp(3rem, 10vw, 8rem);
-    line-height: 1;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
+    font-size: clamp(4rem, 15vw, 12rem); /* 画面サイズに合わせて巨大化 */
+    line-height: 0.9;
+    letter-spacing: -0.03em; /* 文字間を詰めて緊張感を出す */
     color: var(--color-text);
     mix-blend-mode: difference; /* 背景が変わっても見えるように */
+}
+
+.hero__title-line {
+    display: block;
+}
+
+/* 2行目を右にずらしてリズムを作る */
+.hero__title-line:nth-child(2) {
+    text-align: right;
+    margin-top: -2vw; /* 少し重ねる */
 }
 
 /* Works (Horizontal Scroll Setup) */

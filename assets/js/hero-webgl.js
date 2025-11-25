@@ -45,10 +45,10 @@ window.addEventListener('DOMContentLoaded', () => {
         uniform vec2 uResolution;
         varying vec2 vUv;
 
-        // グリッド生成関数
+            // グリッド生成関数 (線を細く、シャープに)
         float grid(vec2 st, float res) {
             vec2 grid = fract(st * res);
-            return (step(0.98, grid.x) + step(0.98, grid.y));
+            return (step(0.99, grid.x) + step(0.99, grid.y));
         }
 
         void main() {
