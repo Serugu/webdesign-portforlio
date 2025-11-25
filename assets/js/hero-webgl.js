@@ -51,23 +51,38 @@ window.addEventListener('DOMContentLoaded', () => {
         }
 
         void main() {
-            // 画面の中心からの距離
-            vec2 center = vUv - 0.5;
+            // マウス座標を -1.0~1.0 から 0.0~1.0 に変換
+            vec2 mousePos = uMouse * 0.5 + 0.5;
             
-            // マウスの影響を受ける歪み（強度を上げた）
-            vec2 distortion = center * length(uMouse * 0.5);
-            vec2 uv = vUv + distortion * 0.3;
+            // アスペクト比補正（正円の歪みにするため）
+            float aspect = uResolution.x / uResolution.y;
+            vec2 aspectUv = vUv;
+            aspectUv.x *= aspect;
+            vec2 aspectMouse = mousePos;
+            aspectMouse.x *= aspect;
 
-            // グラデーション (白からグレー)
-            float gradient = length(uv - 0.5);
+            // マウスからの距離
+            float dist = distance(aspectUv, aspectMouse);
             
-            // わずかな動きを加える (時間経過)
-            float noise = random(uv + uTime * 0.05) * 0.03;
+            // 歪みの強度（マウスに近いほど強い）
+            float strength = smoothstep(0.6, 0.0, dist) * 1.5; // 範囲0.6, 強度1.5
             
-            // デバッグ用：派手な色に変更
-            vec3 color1 = vec3(1.0, 0.3, 0.3); // 赤
-            vec3 color2 = vec3(0.3, 0.3, 1.0); // 青
-            vec3 finalColor = mix(color1, color2, gradient + noise);
+            // 歪ませたUV座標
+            vec2 uv = vUv - (vUv - mousePos) * strength * 0.05;
+
+            // グラデーション生成
+            // 歪んだUVを使ってノイズを生成することで、空間が歪んでいるように見せる
+            float n = random(uv + uTime * 0.1);
+            
+            // 緩やかなグラデーション
+            float gradient = distance(uv, vec2(0.5));
+            
+            vec3 color1 = vec3(0.99, 0.99, 0.99); // ほぼ純白
+            vec3 color2 = vec3(0.92, 0.92, 0.93); // 影色（グレー）
+            
+            // ノイズとグラデーションを混ぜる
+            float mixValue = gradient + n * 0.05;
+            vec3 finalColor = mix(color1, color2, smoothstep(0.0, 1.2, mixValue));
 
             gl_FragColor = vec4(finalColor, 1.0);
         }
@@ -89,15 +104,9 @@ window.addEventListener('DOMContentLoaded', () => {
     scene.add(mesh);
 
     // マウス移動イベント
-    let logCount = 0;
     window.addEventListener('mousemove', (e) => {
         targetMouse.x = (e.clientX / window.innerWidth) * 2 - 1;
         targetMouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-        
-        // デバッグ用：10回に1回だけログ出力（連続で出すとうるさいから）
-        if (logCount++ % 10 === 0) {
-            console.log('Mouse:', targetMouse.x.toFixed(2), targetMouse.y.toFixed(2));
-        }
     });
 
     // リサイズ対応
