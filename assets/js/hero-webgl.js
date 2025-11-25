@@ -14,6 +14,10 @@ window.addEventListener('DOMContentLoaded', () => {
     // Three.jsの確認
     if (typeof THREE === 'undefined') {
         console.error('Three.js not loaded. WebGL disabled.');
+        const debugMsg = document.createElement('div');
+        debugMsg.style.cssText = "position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); color:red; font-size:20px; z-index:9999; background:white; padding:10px;";
+        debugMsg.textContent = "Three.js Load Failed!";
+        document.body.appendChild(debugMsg);
         return;
     }
 
@@ -65,7 +69,7 @@ window.addEventListener('DOMContentLoaded', () => {
             float noise = random(uv + uTime * 0.05) * 0.02;
             
             vec3 color1 = vec3(1.0, 1.0, 1.0); // 白
-            vec3 color2 = vec3(0.96, 0.96, 0.96); // 薄いグレー
+            vec3 color2 = vec3(0.8, 0.8, 1.0); // 薄い青紫（デバッグ用）
             vec3 finalColor = mix(color1, color2, gradient + noise);
 
             gl_FragColor = vec4(finalColor, 1.0);
