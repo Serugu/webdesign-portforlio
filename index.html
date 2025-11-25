@@ -42,14 +42,14 @@
             
             <!-- Hero -->
             <section class="hero" id="hero">
+                <!-- WebGL Canvas (背景) -->
+                <canvas class="hero__canvas" id="hero-canvas"></canvas>
+                
                 <div class="hero__container">
                     <h1 class="hero__title">
                         <span class="hero__title-line">Silence</span>
                         <span class="hero__title-line">& Motion</span>
                     </h1>
-                    <div class="hero__visual">
-                        <!-- WebGL / Image -->
-                    </div>
                 </div>
             </section>
 
@@ -150,7 +150,11 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
     <!-- Lenis (新しいパッケージ名) -->
     <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+    <!-- Three.js (WebGL) -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
+    <!-- WebGL Script (Hero用) -->
+    <script src="./assets/js/hero-webgl.js"></script>
     <!-- Main Script -->
     <!-- type="module" を削除し、deferを付与してHTML読み込み後に実行させる -->
     <script src="./assets/js/main.js" defer></script>
