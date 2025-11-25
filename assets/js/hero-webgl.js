@@ -45,32 +45,45 @@ window.addEventListener('DOMContentLoaded', () => {
         uniform vec2 uResolution;
         varying vec2 vUv;
 
-        float random(vec2 st) {
-            return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+        // グリッド生成関数
+        float grid(vec2 st, float res) {
+            vec2 grid = fract(st * res);
+            return (step(0.98, grid.x) + step(0.98, grid.y));
         }
 
         void main() {
             vec2 mouse = uMouse * 0.5 + 0.5;
             vec2 uv = vUv;
+            
+            // アスペクト比補正
+            float aspect = uResolution.x / uResolution.y;
+            vec2 aspectUv = uv;
+            aspectUv.x *= aspect;
+            vec2 aspectMouse = mouse;
+            aspectMouse.x *= aspect;
 
             // マウス位置を中心とした距離
-            vec2 diff = uv - mouse;
+            vec2 diff = aspectUv - aspectMouse;
             float dist = length(diff);
 
-            // 歪み（リップル + 引き寄せ）
-            float pull = smoothstep(0.45, 0.0, dist);
-            float ripple = sin((dist - uTime * 0.35) * 40.0) * 0.02;
-            uv += normalize(diff + 0.0001) * pull * 0.05; // 引き寄せ
-            uv += diff * ripple; // 波紋
+            // 歪み（強力な引き寄せ効果）
+            float pull = smoothstep(0.5, 0.0, dist);
+            uv += normalize(diff) * pull * 0.05;
 
-            // グラデーション + ノイズ
-            float gradient = distance(uv, vec2(0.5));
-            float grain = random(uv + uTime * 0.1) * 0.08;
-            float shade = clamp(gradient + grain - pull * 0.2, 0.0, 1.0);
+            // 背景グリッドを描画 (歪んだUVを使用)
+            float gridLine = grid(uv, 20.0); // 20分割のグリッド
+            
+            // 色の決定
+            vec3 baseColor = vec3(0.98); // 背景の白
+            vec3 gridColor = vec3(0.85); // グリッドの色（少し濃いグレー）
+            
+            // 歪みに応じてグリッドを少し光らせる
+            gridColor += vec3(0.1) * pull;
 
-            vec3 base = mix(vec3(0.98), vec3(0.9), shade);
-            vec3 glow = vec3(1.0) * smoothstep(0.3, 0.0, dist) * 0.15;
-            vec3 finalColor = base + glow;
+            vec3 finalColor = mix(baseColor, gridColor, gridLine * 0.5);
+            
+            // マウス周辺を少し明るく
+            finalColor += vec3(0.05) * pull;
 
             gl_FragColor = vec4(finalColor, 1.0);
         }
