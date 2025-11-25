@@ -45,44 +45,32 @@ window.addEventListener('DOMContentLoaded', () => {
         uniform vec2 uResolution;
         varying vec2 vUv;
 
-        // ノイズ関数 (簡易版)
         float random(vec2 st) {
             return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
         }
 
         void main() {
-            // マウス座標を -1.0~1.0 から 0.0~1.0 に変換
-            vec2 mousePos = uMouse * 0.5 + 0.5;
-            
-            // アスペクト比補正（正円の歪みにするため）
-            float aspect = uResolution.x / uResolution.y;
-            vec2 aspectUv = vUv;
-            aspectUv.x *= aspect;
-            vec2 aspectMouse = mousePos;
-            aspectMouse.x *= aspect;
+            vec2 mouse = uMouse * 0.5 + 0.5;
+            vec2 uv = vUv;
 
-            // マウスからの距離
-            float dist = distance(aspectUv, aspectMouse);
-            
-            // 歪みの強度（マウスに近いほど強い）
-            float strength = smoothstep(0.6, 0.0, dist) * 1.5; // 範囲0.6, 強度1.5
-            
-            // 歪ませたUV座標
-            vec2 uv = vUv - (vUv - mousePos) * strength * 0.05;
+            // マウス位置を中心とした距離
+            vec2 diff = uv - mouse;
+            float dist = length(diff);
 
-            // グラデーション生成
-            // 歪んだUVを使ってノイズを生成することで、空間が歪んでいるように見せる
-            float n = random(uv + uTime * 0.1);
-            
-            // 緩やかなグラデーション
+            // 歪み（リップル + 引き寄せ）
+            float pull = smoothstep(0.45, 0.0, dist);
+            float ripple = sin((dist - uTime * 0.35) * 40.0) * 0.02;
+            uv += normalize(diff + 0.0001) * pull * 0.05; // 引き寄せ
+            uv += diff * ripple; // 波紋
+
+            // グラデーション + ノイズ
             float gradient = distance(uv, vec2(0.5));
-            
-            vec3 color1 = vec3(0.99, 0.99, 0.99); // ほぼ純白
-            vec3 color2 = vec3(0.92, 0.92, 0.93); // 影色（グレー）
-            
-            // ノイズとグラデーションを混ぜる
-            float mixValue = gradient + n * 0.05;
-            vec3 finalColor = mix(color1, color2, smoothstep(0.0, 1.2, mixValue));
+            float grain = random(uv + uTime * 0.1) * 0.08;
+            float shade = clamp(gradient + grain - pull * 0.2, 0.0, 1.0);
+
+            vec3 base = mix(vec3(0.98), vec3(0.9), shade);
+            vec3 glow = vec3(1.0) * smoothstep(0.3, 0.0, dist) * 0.15;
+            vec3 finalColor = base + glow;
 
             gl_FragColor = vec4(finalColor, 1.0);
         }
@@ -102,14 +90,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const geometry = new THREE.PlaneGeometry(2, 2);
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
-
-    // 【デバッグ用】回転する赤いキューブを追加（WebGL動作確認用）
-    // ※これが表示されたらレンダラーは正常
-    const debugGeo = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-    const debugMat = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-    const debugMesh = new THREE.Mesh(debugGeo, debugMat);
-    // scene.add(debugMesh); // ← 本番ではコメントアウト、今はテストのため有効化
-    scene.add(debugMesh);
 
     // マウス移動イベント
     window.addEventListener('mousemove', (e) => {
@@ -132,15 +112,8 @@ window.addEventListener('DOMContentLoaded', () => {
         mouse.x += (targetMouse.x - mouse.x) * 0.05;
         mouse.y += (targetMouse.y - mouse.y) * 0.05;
 
-        // Uniformsの更新
         material.uniforms.uTime.value = clock.getElapsedTime();
         material.uniforms.uMouse.value.set(mouse.x, mouse.y);
-
-        // デバッグ用キューブを回転
-        if (debugMesh) {
-            debugMesh.rotation.x += 0.01;
-            debugMesh.rotation.y += 0.01;
-        }
 
         renderer.render(scene, camera);
     }
